@@ -7,6 +7,7 @@ from backend.models.business_findings import (
 )
 from backend.models.competitor_analysis import Competitor, CompetitorAnalysis
 from backend.models.research_result import ResearchFinding, ResearchResult
+from backend.models.review_result import ReviewIssue, ReviewResult
 from backend.models.startup_profile import StartupProfile
 from backend.models.validation_job import ValidationJob
 from backend.models.validation_plan import ValidationPlan
@@ -21,6 +22,8 @@ __all__ = [
     "Recommendation",
     "ResearchFinding",
     "ResearchResult",
+    "ReviewIssue",
+    "ReviewResult",
     "Risk",
     "SWOT",
     "StartupProfile",

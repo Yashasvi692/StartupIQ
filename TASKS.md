@@ -1582,7 +1582,7 @@ P4.5
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1621,7 +1621,7 @@ P5.1
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1659,7 +1659,7 @@ P5.2
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1701,7 +1701,7 @@ P5.3
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1736,7 +1736,7 @@ P5.4
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1777,7 +1777,7 @@ P5.5
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1827,7 +1827,7 @@ P5.6
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1861,7 +1861,7 @@ P5.7
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1888,7 +1888,7 @@ P5.8
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1916,7 +1916,7 @@ All previous Phase 5 tasks
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
