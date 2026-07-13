@@ -257,7 +257,7 @@ class TestSmokeTestsPass:
     def test_all_agent_names_match_prompts(self):
         for name, agent_cls, _ in ALL_AGENTS:
             assert agent_cls.name == name, (
-                f"Agent {agent_cls.__name__}.name " f"is '{agent_cls.name}', expected '{name}'"
+                f"Agent {agent_cls.__name__}.name is '{agent_cls.name}', expected '{name}'"
             )
 
     def test_prompt_count_matches_agent_count(self):

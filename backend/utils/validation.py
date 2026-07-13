@@ -67,7 +67,7 @@ def validate_dict_schema(data: dict[str, Any], schema: dict[str, type]) -> list[
         value = data[field]
         if not isinstance(value, expected_type):
             errors.append(
-                f"Field '{field}' expected {expected_type.__name__}, " f"got {type(value).__name__}"
+                f"Field '{field}' expected {expected_type.__name__}, got {type(value).__name__}"
             )
     return errors
 

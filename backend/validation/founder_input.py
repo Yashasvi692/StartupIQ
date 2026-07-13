@@ -58,7 +58,7 @@ def validate_founder_input(data: dict[str, Any]) -> dict[str, list[str]]:
         value = data.get(field)
         if isinstance(value, str) and len(value) > MAX_FIELD_LENGTH:
             errors["warnings"].append(
-                f"Field '{field}' is very long ({len(value)} characters). " f"Consider summarizing."
+                f"Field '{field}' is very long ({len(value)} characters). Consider summarizing."
             )
 
     return errors

@@ -94,9 +94,9 @@ class TestPromptFollowsSpecification:
         output_model: type,
     ) -> None:
         prompt = (PROMPTS_DIR / f"{prompt_name}.md").read_text(encoding="utf-8")
-        assert prompt.strip().startswith(
-            "# Identity"
-        ), f"Prompt '{prompt_name}.md' must start with # Identity"
+        assert prompt.strip().startswith("# Identity"), (
+            f"Prompt '{prompt_name}.md' must start with # Identity"
+        )
 
 
 class TestDynamicLoadingWorks:
@@ -138,7 +138,7 @@ class TestNoEmbeddedPrompts:
         agent_code = agent_path.read_text(encoding="utf-8")
         for section in REQUIRED_SECTIONS:
             assert section not in agent_code, (
-                f"Hardcoded prompt section '{section}' " f"found in {agent_path.name}"
+                f"Hardcoded prompt section '{section}' found in {agent_path.name}"
             )
 
     @pytest.mark.parametrize("prompt_name,agent_cls,output_model", AGENT_PROMPT_MAP)
@@ -152,7 +152,7 @@ class TestNoEmbeddedPrompts:
         agent = agent_cls()
         dynamic_content = get_prompt(prompt_name)
         assert agent.agent.system_message == dynamic_content, (
-            f"Agent '{prompt_name}' system_message " "does not match dynamically loaded prompt"
+            f"Agent '{prompt_name}' system_message does not match dynamically loaded prompt"
         )
 
 
@@ -167,7 +167,7 @@ class TestOutputMatchesContract:
         prompt = (PROMPTS_DIR / f"{prompt_name}.md").read_text(encoding="utf-8")
         model_name = output_model.__name__
         assert model_name in prompt, (
-            f"Prompt '{prompt_name}.md' must mention " f"'{model_name}' in Expected Output"
+            f"Prompt '{prompt_name}.md' must mention '{model_name}' in Expected Output"
         )
 
     @pytest.mark.parametrize("prompt_name,agent_cls,output_model", AGENT_PROMPT_MAP)
@@ -191,6 +191,6 @@ class TestOutputMatchesContract:
         agent_cls: type[StartupIQAgent],
         output_model: type,
     ) -> None:
-        assert (
-            agent_cls.name == prompt_name
-        ), f"Agent name '{agent_cls.name}' must match prompt name '{prompt_name}'"
+        assert agent_cls.name == prompt_name, (
+            f"Agent name '{agent_cls.name}' must match prompt name '{prompt_name}'"
+        )

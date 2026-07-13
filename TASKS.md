@@ -1977,7 +1977,7 @@ P5.10
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -2003,7 +2003,7 @@ P6.1
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -2023,7 +2023,7 @@ P6.2
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -2043,7 +2043,7 @@ P6.3
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -2088,7 +2088,7 @@ P6.5
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -2112,7 +2112,7 @@ P6.6
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -2152,7 +2152,7 @@ P6.7
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
