@@ -1021,7 +1021,7 @@ P2.10
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1058,7 +1058,7 @@ P3.1
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1104,7 +1104,7 @@ P3.2
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1143,7 +1143,7 @@ P3.3
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1173,7 +1173,7 @@ P3.3
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1206,7 +1206,7 @@ P3.5
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1242,7 +1242,7 @@ P3.4
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1280,7 +1280,7 @@ P3.7
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1307,7 +1307,7 @@ P3.8
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1349,7 +1349,7 @@ All previous Phase 3 tasks
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 

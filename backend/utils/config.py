@@ -15,6 +15,14 @@ class Settings(BaseSettings):
     openrouter_api_key: str = ""
     model: str = "deepseek/deepseek-chat-v3-0324:free"
 
+    llm_provider: str = "openrouter"
+    llm_temperature: float = 0.7
+    llm_max_tokens: int = 4096
+    llm_timeout: int = 60
+    llm_retry_max_attempts: int = 3
+    llm_retry_delay: float = 1.0
+    llm_retry_backoff: float = 2.0
+
     log_level: str = "INFO"
 
 
