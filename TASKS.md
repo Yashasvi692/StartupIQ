@@ -1424,7 +1424,7 @@ P3.10
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1446,7 +1446,7 @@ P4.1
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1468,7 +1468,7 @@ P4.2
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1489,7 +1489,7 @@ P4.3
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -1517,7 +1517,7 @@ P4.4
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
