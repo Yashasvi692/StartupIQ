@@ -10,6 +10,7 @@ class Settings(BaseSettings):
 
     project_name: str = "StartupIQ"
     project_version: str = "1.0.0"
+    project_description: str = "An AI-powered Startup Idea Validation Platform"
 
     openrouter_api_key: str = ""
     model: str = "deepseek/deepseek-chat-v3-0324:free"

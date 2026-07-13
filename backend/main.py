@@ -3,11 +3,12 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from backend.api.health import router as health_router
 from backend.api.version import router as version_router
+from backend.utils.config import settings
 
 app = FastAPI(
-    title="StartupIQ",
-    description="An AI-powered Startup Idea Validation Platform",
-    version="1.0.0",
+    title=settings.project_name,
+    description=settings.project_description,
+    version=settings.project_version,
 )
 
 app.add_middleware(

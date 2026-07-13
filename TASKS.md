@@ -540,7 +540,7 @@ P1.9
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -577,7 +577,7 @@ P2.1
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -626,7 +626,7 @@ P2.1
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -668,7 +668,7 @@ P2.1
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -708,7 +708,7 @@ P2.3
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -747,7 +747,7 @@ P2.1
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -787,7 +787,7 @@ P2.3
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -827,7 +827,7 @@ P2.3
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -857,7 +857,7 @@ P2.3
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 
@@ -899,7 +899,7 @@ All previous Phase 2 tasks
 
 **Status**
 
-⬜ Not Started
+✅ Completed
 
 ---
 

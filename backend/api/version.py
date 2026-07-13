@@ -1,7 +1,6 @@
 from fastapi import APIRouter
 
-APP_VERSION = "1.0.0"
-APP_NAME = "StartupIQ"
+from backend.utils.config import settings
 
 router = APIRouter()
 
@@ -9,6 +8,6 @@ router = APIRouter()
 @router.get("/version")
 async def get_version():
     return {
-        "project": APP_NAME,
-        "version": APP_VERSION,
+        "project": settings.project_name,
+        "version": settings.project_version,
     }
