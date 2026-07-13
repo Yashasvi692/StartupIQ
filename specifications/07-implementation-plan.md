@@ -140,21 +140,32 @@ Shared infrastructure is reusable throughout the project.
 
 ## Goal
 
-Integrate Agno.
+Establish the reusable AI infrastructure that powers StartupIQ.
+
+This phase integrates Agno, introduces the shared LLM configuration layer, and creates reusable abstractions for agents and teams.
+
+No startup-specific business logic is implemented during this phase.
 
 ### Deliverables
 
-- Agent base classes
-- Team definitions
-- Validation Pipeline
-- Prompt loading
-- LLM configuration
+- Shared LLM configuration layer
+- Provider abstraction
+- LLM factory
+- Agno integration
+- StartupIQAgent
+- StartupIQTeam
+- Structured output integration
+- Tool integration
+- Discovery Team initialization
 
 ### Acceptance Criteria
 
-Validation Pipeline successfully executes a dummy Validation Team.
-
----
+- Agno integrated successfully.
+- LLM factory operational.
+- StartupIQAgent reusable.
+- StartupIQTeam reusable.
+- Structured outputs validated.
+- Discovery Team initializes successfully.
 
 # Phase 4 — Agent Implementation
 
@@ -276,13 +287,19 @@ Foundation
 Infrastructure
         │
         ▼
+Shared AI Layer
+        │
+        ▼
+Agno Integration
+        │
+        ▼
+Discovery Team
+        │
+        ▼
+Business Agents
+        │
+        ▼
 Validation Pipeline
-        │
-        ▼
-Agno Teams
-        │
-        ▼
-Agents
         │
         ▼
 REST API
@@ -347,14 +364,16 @@ main
 
 # 8. Milestones
 
-| Milestone | Goal |
-|------------|------------------------------|
-| M1 | Project Skeleton |
-| M2 | Validation Pipeline |
-| M3 | Working Agno Teams |
-| M4 | Complete Validation Report |
-| M5 | Functional Frontend |
-| M6 | Version 1 Release |
+| Milestone | Goal                          |
+| --------- | ----------------------------- |
+| M1        | Project Skeleton              |
+| M2        | Core Infrastructure           |
+| M3        | AI Foundation Complete        |
+| M4        | Discovery & Validation Agents |
+| M5        | Validation Pipeline & API     |
+| M6        | Functional Frontend           |
+| M7        | Version 1 Release             |
+
 
 ---
 

@@ -116,7 +116,17 @@ Each layer has a clearly defined responsibility.
                    │
                    ▼
 ┌──────────────────────────────────────┐
-│         Specialized Agents           │
+│      StartupIQ Agent Wrappers        │
+└──────────────────┬───────────────────┘
+                   │
+                   ▼
+┌──────────────────────────────────────┐
+│      Shared LLM Configuration        │
+└──────────────────┬───────────────────┘
+                   │
+                   ▼
+┌──────────────────────────────────────┐
+│         External AI Provider         │
 └──────────────────┬───────────────────┘
                    │
                    ▼
@@ -312,6 +322,23 @@ Agents never communicate directly with one another.
 
 All collaboration occurs through Agno Teams.
 
+## 5.5.1 Shared AI Layer
+
+StartupIQ introduces a shared AI infrastructure layer between the business agents and the underlying LLM provider.
+
+Responsibilities include:
+
+- Loading model configuration
+- Managing retry policy
+- Managing temperature settings
+- Creating configured LLM instances
+- Isolating provider-specific code
+
+Business agents never instantiate language models directly.
+
+All model creation SHALL occur through the shared LLM Factory.
+
+This abstraction allows StartupIQ to switch providers without modifying agent implementations.
 ---
 
 ## 5.6 Tool Layer
@@ -474,6 +501,7 @@ backend/
 ├── pipeline/
 ├── teams/
 ├── agents/
+├── llm/
 ├── prompts/
 ├── tools/
 ├── models/
@@ -546,6 +574,24 @@ Examples include:
 - Reviewer Agent
 
 Agents never invoke one another directly.
+
+---
+## llm/
+
+Contains the shared AI configuration layer.
+
+Responsibilities:
+
+- Provider abstraction
+- LLM factory
+- Model configuration
+- Retry configuration
+- Temperature configuration
+- Token limits
+
+Business agents SHALL never instantiate providers directly.
+
+Every agent receives its configured LLM instance through this layer.
 
 ---
 
@@ -744,6 +790,15 @@ Project folders are organized around business responsibilities instead of implem
 ## DD-007 Open-Source Stack
 
 StartupIQ Version 1 shall rely exclusively on open-source software and freely available services.
+
+---
+## DD-008 Shared LLM Abstraction
+
+StartupIQ isolates language model providers behind a shared LLM configuration layer.
+
+Business agents remain provider-independent.
+
+This architecture allows StartupIQ to switch between OpenRouter, Hugging Face, Ollama, or future providers without modifying agent implementations.
 
 ---
 

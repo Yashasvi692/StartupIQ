@@ -960,15 +960,15 @@ Testing & Release
 
 ## Goal
 
-Integrate Agno into the backend and establish the reusable AI infrastructure.
+Establish the AI infrastructure that powers StartupIQ.
 
-This phase creates the foundation upon which all AI agents and teams will be built.
+This phase integrates Agno into the backend, introduces the shared LLM configuration layer, and creates reusable abstractions for agents and teams.
 
-No business-specific agents are implemented during this phase.
+No startup-specific business logic is implemented during this phase.
 
 ---
 
-## P3.1 Install Agno
+## P3.1 Create AI Configuration Layer
 
 **Priority**
 
@@ -981,17 +981,39 @@ High
 
 **Goal**
 
-Install and configure Agno.
+Create the shared LLM infrastructure used by all AI agents.
+
+**Files**
+
+```text
+backend/llm/
+
+__init__.py
+
+config.py
+
+factory.py
+
+provider.py
+```
 
 **Deliverables**
 
-- Agno installed
-- Dependencies verified
+- Centralized model configuration
+- Provider abstraction
+- LLM factory
+- Retry configuration
+- Temperature configuration
+- Token configuration
 
 **Acceptance Criteria**
 
-- Agno imports successfully
-- Sample agent executes
+- No agent directly instantiates an LLM provider.
+- Default model configurable through environment variables.
+- Temperature configurable.
+- Retry policy configurable.
+- Maximum token limit configurable.
+- LLM instances created through the factory.
 
 **Dependencies**
 
@@ -1003,30 +1025,32 @@ P2.10
 
 ---
 
-## P3.2 Configure LLM Provider
+## P3.2 Integrate Agno
 
 **Priority**
 
 High
 
+**Related Specifications**
+
+- 02 Architecture
+- 04 Agents
+
 **Goal**
 
-Configure the open-source LLM provider.
-
-Version 1 SHALL support:
-
-- OpenRouter
-- Ollama (future)
+Install and configure Agno using the shared LLM configuration layer.
 
 **Deliverables**
 
-- Model configuration
-- Environment variables
+- Agno installed
+- Agno configured
+- Sample agent executes successfully
 
 **Acceptance Criteria**
 
-- Model loads successfully
-- Configuration comes from .env
+- Agno imports successfully.
+- Sample agent runs using the LLM factory.
+- No provider-specific code inside business agents.
 
 **Dependencies**
 
@@ -1038,7 +1062,7 @@ P3.1
 
 ---
 
-## P3.3 Create Base Agent
+## P3.3 Create StartupIQAgent
 
 **Priority**
 
@@ -1046,11 +1070,13 @@ High
 
 **Related Specifications**
 
-04 Agents
+- 04 Agents
 
 **Goal**
 
-Create a reusable BaseAgent abstraction.
+Create the reusable StartupIQAgent wrapper around Agno Agent.
+
+This wrapper shall provide StartupIQ-specific functionality without replacing Agno's native architecture.
 
 **Files**
 
@@ -1060,14 +1086,17 @@ backend/agents/base_agent.py
 
 **Deliverables**
 
-- BaseAgent
-- Shared configuration
-- Prompt loading
-- Common execution interface
+- Shared prompt loading
+- Shared logging
+- Shared model configuration
+- Structured output support
+- Tool registration
 
 **Acceptance Criteria**
 
-All future agents inherit from BaseAgent.
+Every business agent inherits from StartupIQAgent.
+
+No duplicated setup code exists across agents.
 
 **Dependencies**
 
@@ -1079,7 +1108,7 @@ P3.2
 
 ---
 
-## P3.4 Create Base Team
+## P3.4 Create StartupIQTeam
 
 **Priority**
 
@@ -1087,7 +1116,9 @@ High
 
 **Goal**
 
-Create a reusable BaseTeam abstraction.
+Create the reusable StartupIQTeam wrapper around Agno Team.
+
+This wrapper shall manage shared team configuration while preserving Agno's native execution model.
 
 **Files**
 
@@ -1097,13 +1128,14 @@ backend/teams/base_team.py
 
 **Deliverables**
 
-- BaseTeam
-- Shared execution interface
-- Shared context handling
+- Shared team configuration
+- Shared execution settings
+- Shared context support
+- Shared logging
 
 **Acceptance Criteria**
 
-Discovery Team and Validation Team inherit from BaseTeam.
+Discovery Team and Validation Team inherit from StartupIQTeam.
 
 **Dependencies**
 
@@ -1115,24 +1147,25 @@ P3.3
 
 ---
 
-## P3.5 Implement Prompt Integration
+## P3.5 Implement Structured Output Integration
 
 **Priority**
 
-Medium
+High
 
 **Goal**
 
-Connect BaseAgent with Prompt Loader.
+Connect StartupIQAgent with the Pydantic models created in Phase 2.
 
 **Deliverables**
 
-- Automatic prompt loading
-- Prompt caching
+- Structured response generation
+- Pydantic output validation
+- Automatic parsing
 
 **Acceptance Criteria**
 
-Agents load prompts dynamically.
+Agents return validated Pydantic models instead of raw JSON.
 
 **Dependencies**
 
@@ -1152,20 +1185,24 @@ Medium
 
 **Goal**
 
-Allow agents to use Tool classes.
+Integrate the shared Tool framework with StartupIQAgent.
 
 **Deliverables**
 
 - Tool registration
 - Shared execution interface
+- Dependency injection
+- Tool lifecycle management
 
 **Acceptance Criteria**
 
-Agents can invoke registered tools.
+Agents can register and invoke tools through the shared interface.
+
+No tool-specific logic exists inside StartupIQAgent.
 
 **Dependencies**
 
-P3.3
+P3.5
 
 **Status**
 
@@ -1181,7 +1218,7 @@ High
 
 **Goal**
 
-Create the Discovery Team.
+Create the Discovery Team using StartupIQTeam.
 
 **Files**
 
@@ -1191,11 +1228,13 @@ backend/teams/discovery_team.py
 
 **Deliverables**
 
-- Agno Discovery Team
+- Discovery Team
 
 **Acceptance Criteria**
 
-Discovery Team executes successfully.
+Discovery Team initializes successfully.
+
+Team executes using StartupIQTeam.
 
 **Dependencies**
 
@@ -1207,7 +1246,7 @@ P3.4
 
 ---
 
-## P3.8 Implement Validation Team
+## P3.8 AI Infrastructure Smoke Test
 
 **Priority**
 
@@ -1215,59 +1254,56 @@ High
 
 **Goal**
 
-Create the Validation Team.
-
-**Files**
-
-```text
-backend/teams/validation_team.py
-```
-
-**Deliverables**
-
-- Agno Validation Team
+Verify the AI infrastructure before implementing business agents.
 
 **Acceptance Criteria**
 
-Validation Team executes successfully.
+✅ LLM factory works
 
-**Dependencies**
+✅ Agno initialized
 
-P3.4
+✅ StartupIQAgent works
 
-**Status**
-
-⬜ Not Started
-
----
-
-## P3.9 AI Smoke Test
-
-**Priority**
-
-High
-
-**Goal**
-
-Verify AI infrastructure.
-
-**Acceptance Criteria**
-
-✅ BaseAgent works
-
-✅ BaseTeam works
+✅ StartupIQTeam works
 
 ✅ Prompt loading works
 
-✅ Teams initialize successfully
-
-✅ Model loads
+✅ Structured outputs validated
 
 ✅ Tool registration works
 
+✅ Discovery Team initializes
+
 **Dependencies**
 
-All previous Phase 3 tasks
+P3.7
+
+**Status**
+
+⬜ Not Started
+
+---
+
+## P3.9 Documentation Validation
+
+**Priority**
+
+Medium
+
+**Goal**
+
+Verify the AI architecture matches the specifications.
+
+**Acceptance Criteria**
+
+- Architecture matches specifications.
+- No provider-specific code leaks into agents.
+- Wrapper classes remain lightweight.
+- Documentation updated where necessary.
+
+**Dependencies**
+
+P3.8
 
 **Status**
 
@@ -1283,21 +1319,33 @@ High
 
 **Goal**
 
-Verify AI Foundation completion.
+Verify completion of the AI Foundation.
 
 **Acceptance Criteria**
 
-- Agno fully integrated
-- Teams created
-- BaseAgent reusable
-- BaseTeam reusable
-- Prompt loading operational
-- Tool integration operational
-- All smoke tests pass
+✅ Shared AI configuration implemented
+
+✅ Agno integrated
+
+✅ LLM factory operational
+
+✅ StartupIQAgent reusable
+
+✅ StartupIQTeam reusable
+
+✅ Structured outputs working
+
+✅ Prompt loading integrated
+
+✅ Tool integration operational
+
+✅ Discovery Team initialized
+
+✅ All infrastructure tests pass
 
 **Dependencies**
 
-P3.9
+All previous Phase 3 tasks
 
 **Status**
 
@@ -1309,17 +1357,19 @@ P3.9
 
 Deliverables
 
+- Shared AI configuration layer
+- LLM factory
+- Provider abstraction
 - Agno integration
-- BaseAgent
-- BaseTeam
-- Prompt integration
+- StartupIQAgent
+- StartupIQTeam
+- Structured output integration
 - Tool integration
 - Discovery Team
-- Validation Team
 
-No startup-specific business logic has been implemented yet.
+No startup-specific validation logic has been implemented yet.
 
-The repository is now ready for implementing the Discovery Team agents.
+The repository is now ready to implement the Discovery Agent and the Discovery Interview workflow.
 
 ---
 
