@@ -38,7 +38,7 @@ def validate_string(
 def validate_in_range(
     value: Any, field_name: str = "", min_val: float = 0, max_val: float = 100
 ) -> None:
-    if not isinstance(value, (int, float)):
+    if not isinstance(value, int | float):
         raise StartupIQValidationError(f"{field_name} must be a number, got {type(value).__name__}")
     if value < min_val or value > max_val:
         raise StartupIQValidationError(f"{field_name} must be between {min_val} and {max_val}")

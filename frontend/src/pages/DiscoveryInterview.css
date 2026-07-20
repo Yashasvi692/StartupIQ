@@ -1,0 +1,141 @@
+.interview-page {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 48px 32px 80px;
+}
+
+.interview-header {
+  text-align: center;
+  margin-bottom: 48px;
+}
+
+.interview-header h1 {
+  font-size: 36px;
+  font-weight: 700;
+  margin: 0 0 12px;
+}
+
+.interview-subtitle {
+  font-size: 16px;
+  color: var(--text);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.interview-form {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.form-section {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-section legend {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-h);
+  padding: 0 8px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+.required {
+  color: var(--accent);
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  font-family: var(--sans);
+  font-size: 15px;
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-h);
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--accent);
+}
+
+.form-group textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: center;
+  padding-top: 8px;
+}
+
+.submit-button {
+  padding: 14px 40px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.submit-button:hover {
+  opacity: 0.9;
+}
+
+@media (max-width: 768px) {
+  .interview-page {
+    padding: 32px 24px 64px;
+  }
+  .form-row {
+    flex-direction: column;
+  }
+  .interview-header h1 {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 480px) {
+  .interview-page {
+    padding: 24px 16px 48px;
+  }
+  .form-section {
+    padding: 16px;
+  }
+  .submit-button {
+    width: 100%;
+  }
+}

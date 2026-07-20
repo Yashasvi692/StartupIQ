@@ -2520,6 +2520,10 @@ Build the React frontend for StartupIQ.
 
 Create the landing page.
 
+**Status**
+
+✅ Completed
+
 ---
 
 ## P8.2 Discovery Interview
@@ -2530,6 +2534,10 @@ Acceptance Criteria
 
 Collects all required StartupProfile fields.
 
+**Status**
+
+✅ Completed
+
 ---
 
 ## P8.3 Validation Mode
@@ -2538,6 +2546,10 @@ Implement:
 
 - Quick Validation
 - Deep Validation
+
+**Status**
+
+✅ Completed
 
 ---
 
@@ -2548,6 +2560,10 @@ Connect React to FastAPI.
 Acceptance Criteria
 
 Validation requests execute successfully.
+
+**Status**
+
+✅ Completed
 
 ---
 
@@ -2563,6 +2579,10 @@ Shows:
 - Progress %
 - Job status
 
+**Status**
+
+✅ Completed
+
 ---
 
 ## P8.6 Validation Report
@@ -2573,6 +2593,10 @@ Acceptance Criteria
 
 All report sections rendered.
 
+**Status**
+
+✅ Completed
+
 ---
 
 ## P8.7 Report Export
@@ -2582,11 +2606,19 @@ Implement:
 - Markdown export
 - PDF export (future placeholder)
 
+**Status**
+
+✅ Completed
+
 ---
 
 ## P8.8 Error Handling
 
 Display user-friendly error messages.
+
+**Status**
+
+✅ Completed
 
 ---
 
@@ -2598,11 +2630,25 @@ Improve:
 - Empty states
 - Responsive layout
 
+### Completed
+
+- Loading states: Spinner + "Starting validation..." in ProgressView (before first poll); spinner + "Loading report..." in ValidationReport; spinner + "Creating validation job..." in ValidationMode (while API call in flight); shared `.spinner` + `.loading-state` CSS in index.css
+- Empty states: Already handled by existing code (Section returns null for empty content, empty stage lists show "None yet"/"Finalizing...") — no changes needed
+- Responsive layout: Added `@media` breakpoints at 768px and 480px for LandingPage, DiscoveryInterview, ProgressView, ValidationReport, and ValidationMode (font sizes, padding, grid columns, button widths)
+
 ---
 
 ## P8.10 Phase Validation
 
-Acceptance Criteria
+**Priority**
+
+High
+
+**Goal**
+
+Verify Phase 8 frontend completion.
+
+**Acceptance Criteria**
 
 ✅ Discovery Interview works
 
@@ -2611,6 +2657,14 @@ Acceptance Criteria
 ✅ Progress updates
 
 ✅ Report displayed
+
+**Dependencies**
+
+All previous Phase 8 tasks
+
+**Status**
+
+✅ Completed
 
 ---
 
@@ -2624,13 +2678,45 @@ Prepare StartupIQ Version 1 for release.
 
 ## P9.1 Unit Tests
 
-Write unit tests for:
+**Priority**
 
-- Pipeline
-- Teams
-- Agents
-- Tools
-- Models
+High
+
+**Goal**
+
+Write unit tests for uncovered code paths in Pipeline, Teams, Agents, and Tools.
+
+**Files**
+
+```text
+tests/test_pipeline_internal.py
+tests/test_team_detail.py
+tests/test_agent_edge_cases.py
+tests/test_tool_edge_cases.py
+```
+
+**Deliverables**
+
+- Pipeline internal method tests (_validate_transition, _get_job_or_raise, _complete_current_stage)
+- Team-level function tests (_format_context)
+- Agent edge case tests (run_structured with dict content, instructions, output model)
+- Tool edge case tests (adapter failure path, BaseTool.run() error handling, ToolResponse metadata)
+
+**Acceptance Criteria**
+
+- Pipeline internal methods directly tested
+- _format_context function tested independently
+- Agent structured output edge cases covered
+- Tool adapter failure path tested
+- All existing tests continue to pass
+
+**Dependencies**
+
+All previous tasks
+
+**Status**
+
+✅ Completed
 
 ---
 
