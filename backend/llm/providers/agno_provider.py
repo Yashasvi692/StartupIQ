@@ -1,7 +1,7 @@
 from collections.abc import AsyncGenerator
 from typing import Any
 
-from agno.models.openrouter import OpenRouter
+from agno.models.google import Gemini
 
 from backend.llm.config import LLMConfig
 from backend.llm.provider import LLMProvider
@@ -13,10 +13,10 @@ logger = get_logger(__name__)
 class AgnoProvider(LLMProvider):
     def __init__(self, config: LLMConfig) -> None:
         super().__init__(config)
-        self._model = OpenRouter(**config.to_provider_kwargs())
+        self._model = Gemini(**config.to_provider_kwargs())
 
     @property
-    def agno_model(self) -> OpenRouter:
+    def agno_model(self) -> Gemini:
         return self._model
 
     async def generate(self, messages: list[dict]) -> str:

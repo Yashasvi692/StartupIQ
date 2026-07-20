@@ -798,7 +798,7 @@ StartupIQ isolates language model providers behind a shared LLM configuration la
 
 Business agents remain provider-independent.
 
-This architecture allows StartupIQ to switch between OpenRouter, Hugging Face, Ollama, or future providers without modifying agent implementations.
+This architecture allows StartupIQ to switch between Google AI Studio, Hugging Face, Ollama, or future providers without modifying agent implementations.
 
 ---
 

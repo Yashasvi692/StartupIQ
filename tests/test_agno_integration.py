@@ -11,18 +11,18 @@ class TestAgnoImport:
 
         assert hasattr(agno, "__version__")
 
-    def test_openrouter_imports_successfully(self):
-        from agno.models.openrouter import OpenRouter
+    def test_gemini_imports_successfully(self):
+        from agno.models.google import Gemini
 
-        assert OpenRouter is not None
+        assert Gemini is not None
 
 
 class TestAgnoProvider:
     def test_provider_created_through_factory(self):
-        config = LLMConfig(model="google/gemma-4-26b-a4b-it:free")
+        config = LLMConfig(model="gemini-2.0-flash-001")
         provider = create_llm(config)
         assert isinstance(provider, AgnoProvider)
-        assert provider.config.model == "google/gemma-4-26b-a4b-it:free"
+        assert provider.config.model == "gemini-2.0-flash-001"
 
     def test_default_registration(self):
         assert "default" in _registry
@@ -53,12 +53,12 @@ class TestSampleAgent:
     @pytest.mark.asyncio
     async def test_provider_configures_agno_model(self):
         config = LLMConfig(
-            model="google/gemma-4-26b-a4b-it:free",
+            model="gemini-2.0-flash-001",
             temperature=0.2,
             max_tokens=512,
         )
         provider = create_llm(config)
-        assert provider._model.id == "google/gemma-4-26b-a4b-it:free"
+        assert provider._model.id == "gemini-2.0-flash-001"
 
     @pytest.mark.asyncio
     async def test_provider_builds_kwargs(self):

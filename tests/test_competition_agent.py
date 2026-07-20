@@ -91,7 +91,7 @@ class TestCompetitionAgentTools:
     def test_has_duckduckgo_tool_by_default(self):
         agent = CompetitionAgent()
         assert len(agent._tools) == 1
-        assert agent._tools[0].__name__ == "duckduckgo_search"
+        assert agent._tools[0].name == "duckduckgo_search"
 
     def test_accepts_custom_tools(self):
         async def custom_tool(**kw):

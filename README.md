@@ -207,7 +207,7 @@ All implementation begins with specifications.
 ## AI
 
 - Agno Teams
-- OpenRouter (Free Models)
+- Google AI Studio (Gemini API)
 - Ollama (Future Support)
 
 ---
@@ -289,14 +289,12 @@ Create a `.env` file.
 Example
 
 ```env
-OPENROUTER_API_KEY=
+GOOGLE_API_KEY=
 
-MODEL=deepseek/deepseek-chat-v3-0324:free
+MODEL=gemini-2.5-flash
 
 LOG_LEVEL=INFO
 ```
-
-Future versions will support Ollama for fully local inference.
 
 ---
 

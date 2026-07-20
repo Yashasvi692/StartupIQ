@@ -93,7 +93,7 @@ class TestResearchAgentTools:
     def test_has_duckduckgo_tool_by_default(self):
         agent = ResearchAgent()
         assert len(agent._tools) == 1
-        assert agent._tools[0].__name__ == "duckduckgo_search"
+        assert agent._tools[0].name == "duckduckgo_search"
 
     def test_accepts_custom_tools(self):
         async def custom_tool(**kw):
@@ -255,5 +255,5 @@ class TestDuckDuckGoToolStructure:
 
         tool = DuckDuckGoTool()
         adapted = adapt_tool(tool)
-        assert adapted.__name__ == "duckduckgo_search"
+        assert adapted.name == "duckduckgo_search"
         assert len(adapted.__doc__ or "") > 0

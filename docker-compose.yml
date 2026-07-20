@@ -6,8 +6,8 @@ services:
     ports:
       - "8000:8000"
     environment:
-      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY:-}
-      - MODEL=${MODEL:-deepseek/deepseek-chat-v3-0324:free}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - MODEL=${MODEL:-gemini-2.5-flash}
       - LOG_LEVEL=${LOG_LEVEL:-INFO}
     env_file:
       - .env

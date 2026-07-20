@@ -17,7 +17,7 @@ class TestToolAdapterFailure:
         adapted = adapt_tool(tool)
 
         async def run_adapted():
-            result = await adapted()
+            result = await adapted.entrypoint()
             return result
 
         with pytest.raises(RuntimeError, match="Something broke"):
@@ -37,7 +37,7 @@ class TestToolAdapterFailure:
         adapted = adapt_tool(tool)
 
         async def run_adapted():
-            return await adapted()
+            return await adapted.entrypoint()
 
         with pytest.raises(RuntimeError, match="Custom failure: rate limited"):
             import asyncio
@@ -56,7 +56,7 @@ class TestToolAdapterFailure:
         adapted = adapt_tool(tool)
 
         async def run_adapted():
-            result = await adapted(value="hello")
+            result = await adapted.entrypoint(value="hello")
             return result
 
         import asyncio
@@ -74,8 +74,8 @@ class TestToolAdapterFailure:
 
         tool = MyTool()
         adapted = adapt_tool(tool)
-        assert adapted.__name__ == "my_tool"
-        assert adapted.__doc__ == "My custom tool"
+        assert adapted.name == "my_tool"
+        assert adapted.description == "My custom tool"
 
 
 class TestToolResponseEdgeCases:

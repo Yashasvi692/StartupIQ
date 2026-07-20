@@ -2,7 +2,7 @@ from typing import Any
 
 import httpx
 from agno.agent import Agent
-from agno.exceptions import ModelProviderError
+from google.genai import errors as genai_errors
 from pydantic import BaseModel
 
 from backend.llm import LLMConfig, create_llm
@@ -72,7 +72,7 @@ class StartupIQAgent:
                 "or provide it in the constructor."
             )
 
-        retryable = (ModelProviderError, httpx.HTTPError, ConnectionError, TimeoutError)
+        retryable = (genai_errors.APIError, httpx.HTTPError, ConnectionError, TimeoutError)
         response = await retry_async(
             lambda: self.agent.arun(message, output_schema=model),
             max_retries=3,

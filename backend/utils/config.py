@@ -12,11 +12,10 @@ class Settings(BaseSettings):
     project_version: str = "1.0.0"
     project_description: str = "An AI-powered Startup Idea Validation Platform"
 
-    openrouter_api_key: str = ""
-    model: str = "deepseek/deepseek-chat-v3-0324:free"
+    google_api_key: str = ""
+    model: str = "gemini-2.5-flash"
 
-    llm_provider: str = "openrouter"
-    llm_temperature: float = 0.7
+    llm_temperature: float = 0.2
     llm_max_tokens: int = 4096
     llm_timeout: int = 60
     llm_retry_max_attempts: int = 3
