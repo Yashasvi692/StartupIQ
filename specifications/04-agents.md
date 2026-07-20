@@ -1,4 +1,4 @@
-# Workflow Specification
+# Agent Specification
 
 **Project:** StartupIQ
 

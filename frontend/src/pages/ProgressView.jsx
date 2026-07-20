@@ -7,17 +7,23 @@ const ERROR_MESSAGES = {
   cancelled: 'The validation was cancelled.',
 }
 
+const MAX_POLL_ERRORS = 5
+
 function ProgressView({ jobId, onComplete, onRetry }) {
   const [status, setStatus] = useState(null)
   const [error, setError] = useState(null)
   const intervalRef = useRef(null)
+  const errorCountRef = useRef(0)
 
   useEffect(() => {
+    errorCountRef.current = 0
+
     async function poll() {
       try {
         const data = await getJobStatus(jobId)
         setStatus(data)
         setError(null)
+        errorCountRef.current = 0
 
         if (data.status === 'completed' || data.status === 'failed' || data.status === 'cancelled') {
           clearInterval(intervalRef.current)
@@ -26,6 +32,10 @@ function ProgressView({ jobId, onComplete, onRetry }) {
           }
         }
       } catch {
+        errorCountRef.current += 1
+        if (errorCountRef.current >= MAX_POLL_ERRORS) {
+          clearInterval(intervalRef.current)
+        }
         setError('Unable to reach the server. Please check your connection and try again.')
       }
     }

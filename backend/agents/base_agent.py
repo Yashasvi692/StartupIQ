@@ -1,13 +1,17 @@
 from typing import Any
 
+import httpx
 from agno.agent import Agent
+from agno.exceptions import ModelProviderError
 from pydantic import BaseModel
 
 from backend.llm import LLMConfig, create_llm
 from backend.tools.adapter import adapt_tool
 from backend.tools.base_tool import BaseTool
+from backend.utils.exceptions import PipelineError
 from backend.utils.logger import get_logger
 from backend.utils.prompt_loader import get_prompt
+from backend.utils.retry import retry_async
 
 
 class StartupIQAgent:
@@ -68,14 +72,25 @@ class StartupIQAgent:
                 "or provide it in the constructor."
             )
 
-        response = await self.agent.arun(message, output_schema=model)
+        retryable = (ModelProviderError, httpx.HTTPError, ConnectionError, TimeoutError)
+        response = await retry_async(
+            lambda: self.agent.arun(message, output_schema=model),
+            max_retries=3,
+            delay=1.0,
+            backoff=2.0,
+            exceptions=retryable,
+        )
 
         content = response.content
         if isinstance(content, BaseModel):
             return content
         if isinstance(content, dict):
             return model.model_validate(content)
+        if isinstance(content, str):
+            raise PipelineError(
+                f"LLM provider returned an error instead of structured output: {content[:300]}"
+            )
         raise TypeError(
             f"Expected structured output as {model.__name__}, "
-            f"got {type(content).__name__}: {content}"
+            f"got {type(content).__name__}: {content[:200]}"
         )
