@@ -1,5 +1,3 @@
-import asyncio
-
 from pydantic import BaseModel
 
 from backend.agents.business_agent import BusinessAgent
@@ -8,6 +6,7 @@ from backend.agents.planner_agent import PlannerAgent
 from backend.agents.report_agent import ReportAgent
 from backend.agents.research_agent import ResearchAgent
 from backend.agents.reviewer_agent import ReviewerAgent
+from backend.execution.execution_manager import ExecutionManager
 from backend.models.business_findings import BusinessFindings
 from backend.models.competitor_analysis import CompetitorAnalysis
 from backend.models.research_result import ResearchResult
@@ -53,6 +52,7 @@ class ValidationTeam(StartupIQTeam):
         context: dict | None = None,
         markdown: bool = True,
         show_members_responses: bool = False,
+        executor: ExecutionManager | None = None,
     ) -> None:
         self._planner = planner_agent or PlannerAgent()
         self._researcher = research_agent or ResearchAgent()
@@ -60,6 +60,7 @@ class ValidationTeam(StartupIQTeam):
         self._analyst = business_agent or BusinessAgent()
         self._reporter = report_agent or ReportAgent()
         self._reviewer = reviewer_agent or ReviewerAgent()
+        self._executor = executor or ExecutionManager()
 
         team_instructions = instructions or [
             "Transform a StartupProfile into a complete Validation Report.",
@@ -101,15 +102,21 @@ class ValidationTeam(StartupIQTeam):
         )
         logger.info("Planner stage complete")
 
-        research_task = self._researcher.run_structured(
-            _format_context(startup_profile, plan),
-        )
-        competition_task = self._competitor.run_structured(
-            _format_context(startup_profile),
-        )
-        research_raw, competition_raw = await asyncio.gather(
-            research_task,
-            competition_task,
+        research_raw, competition_raw = await self._executor.run(
+            [
+                (
+                    "research",
+                    self._researcher.run_structured(
+                        _format_context(startup_profile, plan),
+                    ),
+                ),
+                (
+                    "competition",
+                    self._competitor.run_structured(
+                        _format_context(startup_profile),
+                    ),
+                ),
+            ]
         )
         research_result = (
             research_raw
