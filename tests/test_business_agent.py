@@ -78,7 +78,6 @@ class TestBusinessAgentOutputModel:
             "# Constraints",
             "# Inputs",
             "# Available Context",
-            "# Available Tools",
             "# Reasoning Instructions",
             "# Expected Output",
             "# Quality Checklist",
@@ -102,15 +101,11 @@ class TestBusinessAgentTools:
         agent = BusinessAgent()
         assert len(agent.agent.tools) == 0
 
-    def test_accepts_custom_tools(self):
-        async def custom_tool(**kw):
-            return "custom"
+    def test_has_deterministic_search_internally(self):
+        from backend.workflows.deterministic_search import DeterministicSearch
 
-        custom_tool.__name__ = "custom_tool"
-
-        agent = BusinessAgent(tools=[custom_tool])
-        assert len(agent._tools) == 1
-        assert agent._tools[0].__name__ == "custom_tool"
+        agent = BusinessAgent()
+        assert isinstance(agent._search, DeterministicSearch)
 
 
 class TestBusinessAgentInstructions:

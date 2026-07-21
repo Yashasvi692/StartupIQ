@@ -72,7 +72,6 @@ class TestCompetitionAgentOutputModel:
             "# Constraints",
             "# Inputs",
             "# Available Context",
-            "# Available Tools",
             "# Reasoning Instructions",
             "# Expected Output",
             "# Quality Checklist",
@@ -88,41 +87,35 @@ class TestCompetitionAgentOutputModel:
 
 
 class TestCompetitionAgentTools:
-    def test_has_duckduckgo_tool_by_default(self):
+    def test_has_no_agno_tools_by_default(self):
         agent = CompetitionAgent()
-        assert len(agent._tools) == 1
-        assert agent._tools[0].name == "duckduckgo_search"
+        assert len(agent._tools) == 0
 
-    def test_accepts_custom_tools(self):
-        async def custom_tool(**kw):
-            return "custom"
-
-        custom_tool.__name__ = "custom_tool"
-
-        agent = CompetitionAgent(tools=[custom_tool])
-        assert len(agent._tools) == 1
-        assert agent._tools[0].__name__ == "custom_tool"
-
-    def test_agno_agent_has_tools(self):
+    def test_agno_agent_has_no_tools(self):
         agent = CompetitionAgent()
-        assert len(agent.agent.tools) >= 1
+        assert len(agent.agent.tools) == 0
+
+    def test_has_deterministic_search_internally(self):
+        from backend.workflows.deterministic_search import DeterministicSearch
+
+        agent = CompetitionAgent()
+        assert isinstance(agent._search, DeterministicSearch)
 
 
 class TestCompetitionAgentInstructions:
     def test_has_default_instructions(self):
         agent = CompetitionAgent()
-        assert len(agent.agent.instructions) >= 1
+        assert len(agent.agent.instructions) == 4
 
-    def test_competitor_search_instruction_present(self):
+    def test_competitor_instruction_present(self):
         agent = CompetitionAgent()
         instructions = " ".join(agent.agent.instructions or [])
-        assert "competitor" in instructions.lower() or "search" in instructions.lower()
+        assert "competitor" in instructions.lower()
 
     def test_accepts_custom_instructions(self):
         agent = CompetitionAgent(extra_instructions=["Custom instruction"])
-        assert len(agent.agent.instructions) == 7
+        assert len(agent.agent.instructions) == 1
         assert agent.agent.instructions[0] == "Custom instruction"
-        assert "Use tools only when necessary." in agent.agent.instructions
 
 
 class TestCompetitionAgentRunStructured:

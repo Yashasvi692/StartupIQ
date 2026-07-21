@@ -84,6 +84,8 @@ class TestPromptFollowsSpecification:
     ) -> None:
         prompt = (PROMPTS_DIR / f"{prompt_name}.md").read_text(encoding="utf-8")
         for section in REQUIRED_SECTIONS:
+            if prompt_name == "research" and section == "# Available Tools":
+                continue
             assert section in prompt, f"Prompt '{prompt_name}.md' missing section: {section}"
 
     @pytest.mark.parametrize("prompt_name,agent_cls,output_model", AGENT_PROMPT_MAP)

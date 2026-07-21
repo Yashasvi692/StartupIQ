@@ -7,6 +7,7 @@ from backend.agents import ResearchAgent, StartupIQAgent
 from backend.models.research_result import ResearchFinding, ResearchResult
 from backend.tools.duckduckgo_tool import DuckDuckGoTool
 from backend.utils.prompt_loader import clear_cache
+from backend.workflows.deterministic_search import DeterministicSearch
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
 PROMPTS_DIR = PROJECT_ROOT / "backend" / "prompts"
@@ -51,6 +52,11 @@ class TestResearchAgentStructure:
         assert "Research" in msg
         assert "ResearchResult" in msg
 
+    def test_has_internal_deterministic_search(self):
+        agent = ResearchAgent()
+        assert agent._search is not None
+        assert isinstance(agent._search, DeterministicSearch)
+
 
 class TestResearchAgentOutputModel:
     def test_output_model_is_research_result(self):
@@ -74,7 +80,6 @@ class TestResearchAgentOutputModel:
             "# Constraints",
             "# Inputs",
             "# Available Context",
-            "# Available Tools",
             "# Reasoning Instructions",
             "# Expected Output",
             "# Quality Checklist",
@@ -90,24 +95,18 @@ class TestResearchAgentOutputModel:
 
 
 class TestResearchAgentTools:
-    def test_has_duckduckgo_tool_by_default(self):
+    def test_has_no_tools_by_default(self):
         agent = ResearchAgent()
-        assert len(agent._tools) == 1
-        assert agent._tools[0].name == "duckduckgo_search"
+        assert len(agent._tools) == 0
 
-    def test_accepts_custom_tools(self):
-        async def custom_tool(**kw):
-            return "custom"
-
-        custom_tool.__name__ = "custom_tool"
-
-        agent = ResearchAgent(tools=[custom_tool])
-        assert len(agent._tools) == 1
-        assert agent._tools[0].__name__ == "custom_tool"
-
-    def test_agno_agent_has_tools(self):
+    def test_agno_agent_has_no_tools(self):
         agent = ResearchAgent()
-        assert len(agent.agent.tools) >= 1
+        assert len(agent.agent.tools) == 0
+
+    def test_has_duckduckgo_via_deterministic_search(self):
+        agent = ResearchAgent()
+        assert agent._search._search_tool is not None
+        assert agent._search._search_tool.name == "duckduckgo_search"
 
 
 class TestResearchAgentInstructions:
@@ -121,10 +120,10 @@ class TestResearchAgentInstructions:
         assert "search" in instructions.lower()
 
     def test_accepts_custom_instructions(self):
-        agent = ResearchAgent(extra_instructions=["Custom instruction"])
-        assert len(agent.agent.instructions) == 7
+        custom = ["Custom instruction"]
+        agent = ResearchAgent(extra_instructions=custom)
+        assert len(agent.agent.instructions) == 1
         assert agent.agent.instructions[0] == "Custom instruction"
-        assert "Use tools only when necessary." in agent.agent.instructions
 
 
 class TestResearchAgentRunStructured:
@@ -138,6 +137,29 @@ class TestResearchAgentRunStructured:
     async def test_run_structured_returns_research_result_type(self):
         agent = ResearchAgent()
         assert agent._output_model is ResearchResult
+
+
+class TestResearchAgentRunStructuredFlow:
+    @pytest.mark.asyncio
+    async def test_run_structured_delegates_to_deterministic_search(self):
+        agent = ResearchAgent()
+
+        mock_result = ResearchResult(
+            market_size_findings=[
+                ResearchFinding(
+                    finding="Market growing 15%",
+                    source="https://ex.com/market",
+                    confidence=0.8,
+                )
+            ],
+        )
+
+        agent._search.run = AsyncMock(return_value=mock_result)
+        result = await agent.run_structured("Analyze AI healthcare startup")
+
+        assert isinstance(result, ResearchResult)
+        assert len(result.market_size_findings) == 1
+        agent._search.run.assert_awaited_once()
 
 
 class TestResearchAgentIntegration:
