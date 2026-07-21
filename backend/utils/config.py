@@ -22,6 +22,8 @@ class Settings(BaseSettings):
     llm_retry_delay: float = 1.0
     llm_retry_backoff: float = 2.0
 
+    tool_call_limit: int = 3
+
     execution_mode: str = "sequential"
 
     log_level: str = "INFO"

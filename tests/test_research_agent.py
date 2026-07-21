@@ -122,8 +122,9 @@ class TestResearchAgentInstructions:
 
     def test_accepts_custom_instructions(self):
         agent = ResearchAgent(extra_instructions=["Custom instruction"])
-        assert len(agent.agent.instructions) == 1
+        assert len(agent.agent.instructions) == 7
         assert agent.agent.instructions[0] == "Custom instruction"
+        assert "Use tools only when necessary." in agent.agent.instructions
 
 
 class TestResearchAgentRunStructured:

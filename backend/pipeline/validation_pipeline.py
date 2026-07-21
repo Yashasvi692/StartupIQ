@@ -2,6 +2,7 @@ from datetime import datetime
 from enum import StrEnum
 from typing import Any
 
+from backend.llm.instrumentation import GeminiTracker
 from backend.models.startup_profile import StartupProfile
 from backend.models.validation_job import ValidationJob
 from backend.models.validation_report import ValidationReport
@@ -99,6 +100,7 @@ class ValidationPipeline:
         mode: str = "deep",
     ) -> ValidationJob:
         logger.info("Pipeline running full validation")
+        GeminiTracker.get().reset()
         job = None
         try:
             profile = await self.run_discovery(founder_input)
@@ -113,9 +115,12 @@ class ValidationPipeline:
             if job is not None:
                 logger.exception(f"Full validation failed for job: {job.job_id}: {error_msg}")
                 self.fail_job(job.job_id, error_message=error_msg)
+                GeminiTracker.get().print_summary()
                 return self._jobs[job.job_id]
             logger.exception(f"Full validation failed before job creation: {error_msg}")
             raise
+        finally:
+            GeminiTracker.get().print_summary()
 
     # ── Job Lifecycle ──────────────────────────────────────────────────────
 

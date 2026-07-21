@@ -201,5 +201,155 @@ class TestStartupIQAgentStructuredOutput:
 
 
 class _MockRunOutput:
-    def __init__(self, content):
+    def __init__(self, content, metrics=None):
         self.content = content
+        self.metrics = metrics or {}
+
+
+class TestStartupIQAgentToolCallLimit:
+    _prompt = "_test_siq_tool_limit"
+
+    @pytest.fixture(autouse=True)
+    def setup_prompt(self):
+        prompt_file = PROMPTS_DIR / f"{self._prompt}.md"
+        prompt_file.write_text("# Test Tool Limit Agent", encoding="utf-8")
+        clear_cache()
+        yield
+        if prompt_file.exists():
+            prompt_file.unlink()
+            clear_cache()
+
+    def test_default_tool_call_limit_is_three(self):
+        class TestAgent(StartupIQAgent):
+            name = self._prompt
+
+        agent = TestAgent()
+        assert agent._tool_call_limit == 3
+        assert agent.agent.tool_call_limit == 3
+
+    def test_custom_tool_call_limit_override(self):
+        class TestAgent(StartupIQAgent):
+            name = self._prompt
+
+        agent = TestAgent(tool_call_limit=5)
+        assert agent._tool_call_limit == 5
+        assert agent.agent.tool_call_limit == 5
+
+    def test_tool_enabled_agent_has_execution_instructions(self):
+        from backend.tools.base_tool import BaseTool, ToolResponse
+
+        class TestTool(BaseTool):
+            name = "test_tool"
+            description = "A test tool"
+
+            async def execute(self, **kw):
+                return ToolResponse(success=True, data="ok")
+
+        class TooledAgent(StartupIQAgent):
+            name = self._prompt
+
+        agent = TooledAgent(tools=[TestTool()])
+        instructions = " ".join(agent.agent.instructions or [])
+        assert "Use tools only when necessary." in instructions
+        assert "Never repeat the same search." in instructions
+        assert "Do not exceed the available tool budget." in instructions
+
+    def test_agent_without_tools_has_no_execution_instructions(self):
+        class NoToolAgent(StartupIQAgent):
+            name = self._prompt
+
+        agent = NoToolAgent()
+        instructions = " ".join(agent.agent.instructions or [])
+        assert "Use tools only when necessary." not in instructions
+
+    def test_config_override_via_constructor(self):
+        class TestAgent(StartupIQAgent):
+            name = self._prompt
+
+        agent = TestAgent(tool_call_limit=10)
+        assert agent._tool_call_limit == 10
+        assert agent.agent.tool_call_limit == 10
+
+    def test_registered_tools_get_execution_instructions(self):
+        from backend.tools.base_tool import BaseTool, ToolResponse
+
+        class TestTool(BaseTool):
+            name = "test_tool"
+            description = "A test tool"
+
+            async def execute(self, **kw):
+                return ToolResponse(success=True, data="ok")
+
+        class TooledAgent(StartupIQAgent):
+            name = self._prompt
+
+        agent = TooledAgent()
+        assert "Use tools only when necessary." not in " ".join(agent.agent.instructions or [])
+
+        agent.register_tools([TestTool()])
+        instructions = " ".join(agent.agent.instructions or [])
+        assert "Use tools only when necessary." in instructions
+
+    @pytest.mark.asyncio
+    async def test_run_structured_logs_tool_calls(self):
+        from pydantic import BaseModel
+
+        class TestOutput(BaseModel):
+            result: str
+
+        class TestAgent(StartupIQAgent):
+            name = self._prompt
+
+        agent = TestAgent(output_model=TestOutput)
+
+        async def mock_arun(message, **kw):
+            return _MockRunOutput(
+                content={"result": "done"},
+                metrics={"total_tool_calls": 2},
+            )
+
+        agent.agent.arun = mock_arun
+        result = await agent.run_structured("test")
+        assert isinstance(result, TestOutput)
+        assert result.result == "done"
+
+    @pytest.mark.asyncio
+    async def test_run_structured_logs_zero_tool_calls(self):
+        from pydantic import BaseModel
+
+        class TestOutput(BaseModel):
+            result: str
+
+        class TestAgent(StartupIQAgent):
+            name = self._prompt
+
+        agent = TestAgent(output_model=TestOutput)
+
+        async def mock_arun(message, **kw):
+            return _MockRunOutput(
+                content={"result": "no_tools"},
+                metrics={"total_tool_calls": 0},
+            )
+
+        agent.agent.arun = mock_arun
+        result = await agent.run_structured("test")
+        assert result.result == "no_tools"
+
+    @pytest.mark.asyncio
+    async def test_run_structured_handles_missing_metrics(self):
+        from pydantic import BaseModel
+
+        class TestOutput(BaseModel):
+            result: str
+
+        class TestAgent(StartupIQAgent):
+            name = self._prompt
+
+        agent = TestAgent(output_model=TestOutput)
+
+        async def mock_arun(message, **kw):
+            return _MockRunOutput(content={"result": "no_metrics"})
+
+        agent.agent.arun = mock_arun
+        result = await agent.run_structured("test")
+        assert result.result == "no_metrics"
